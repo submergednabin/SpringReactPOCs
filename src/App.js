@@ -1,4 +1,5 @@
 import { Fragment } from "react";
+import Form from "./components/Form";
 
 
 function App() {
@@ -6,6 +7,7 @@ function App() {
     <h1>
       BANK OF CODE
     </h1>
+    <Form />
   </Fragment>
 }
 
