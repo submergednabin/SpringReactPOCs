@@ -1,11 +1,31 @@
-import React from "react";
+import React, { useState } from "react";
 
 const Form = () => {
+  const [login, setLogin] = useState({
+    username: "",
+    password: "",
+  });
 
-    const loginHandler = (e) => {
-        e.preventDefault();
-        alert("login handler");
-    }
+  const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+  const [nameErr, setNameErr] = useState("");
+  const [passwordErr, setPasswordErr] = useState("");
+  const [message] = useState({
+    NAME_ERR:
+      "Username must be greater than 2 Letter and must not contain special characters",
+    PASSWORD_ERR: "password must be valid",
+    MANDATORY: "All fields are required",
+  });
+
+  const loginHandler = (e) => {
+    e.preventDefault();
+    alert("login handler");
+  };
+
+  const validationHandler = (event) => {
+    event.preventDefault();
+    const { name, value } = event.target;
+  };
 
   return (
     <>
@@ -15,9 +35,14 @@ const Form = () => {
             User ID
           </label>
           <div className="col-sm-3">
-            <input className="form-control" type="text" />
-            <small id="emailHelp" class="form-text text-muted">
-             Enter your email or username
+            <input
+              className="form-control"
+              type="text"
+              name="username"
+              onChange={validationHandler}
+            />
+            <small id="info" class="form-text text-muted">
+              Enter your email or username
             </small>
           </div>
         </div>
