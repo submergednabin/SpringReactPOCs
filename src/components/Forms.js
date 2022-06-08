@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { Button, Form, Row, Col, Alert } from "react-bootstrap";
+import axios from "axios";
 
+const url = "http://localhost:8080/boc";
 const Forms = () => {
   const [login, setLogin] = useState({
     username: "",
@@ -14,13 +16,39 @@ const Forms = () => {
   const [message] = useState({
     NAME_ERR:
       "Username must be greater than 2 Letter and must not contain special characters",
-    PASSWORD_ERR: "password must be valid",
+    PWD_INVALID: "password must be valid / Incorrect",
+    USER_INVALID:"User name doesn't exists",
     MANDATORY: "All fields are required",
+    SUCCESS: "Successfully Login",
+    ERROR: "Username or password incorrect"
   });
 
   const loginHandler = (e) => {
     e.preventDefault();
-    alert("login handler");
+    const datas = {
+      username: login.username,
+      password: login.password
+    }
+    if(datas.username.trim()==="" && datas.password.trim() === "" ){
+      setErrorMessage(message.MANDATORY);
+    }else{
+      axios.post(`${url}/login`, datas).then(res=>{
+        if(res.status===200){
+          setErrorMessage("")
+          setNameErr("");
+          setPasswordErr("")
+          setSuccessMessage(message.SUCCESS)
+          
+        }else{
+          setErrorMessage(message.ERROR)
+        }
+      }).catch(error =>{
+        setErrorMessage(message.ERROR)
+      });
+      
+    }
+
+
   };
 
   const validationHandler = (event) => {
@@ -30,15 +58,23 @@ const Forms = () => {
     switch (name) {
       case "username":
         if (value.length <= 2) {
-          setErrorMessage("Username must be greater than 2 characters");
+          setNameErr("Username must be greater than 2 characters");
+        }
+        else{
+          setLogin({...login, [name]: value})
+          setNameErr("")
         }
         break;
       case "password":
         if (value.length <= 3) {
-          setErrorMessage("password length must be greater than 3");
+          setPasswordErr("password length must be greater than 3");
         }
-        if (value.length > 20) {
-          setErrorMessage("Password cannot exceeed 20 characters");
+        else if (value.length > 20) {
+          setPasswordErr("Password cannot exceeed 20 characters");
+        }
+        else{
+          setLogin({...login, [name]: value} )
+          setPasswordErr("");
         }
         break;
 
@@ -64,11 +100,12 @@ const Forms = () => {
             <small id="info" className="form-text text-muted">
               Enter your email or username
             </small>
-          </Col>
-            {errorMessage.length > 0 && 
-          <Alert as={Row} column sm={2} variant="danger">
-            <p>{errorMessage}</p>
+            {nameErr.length > 0 && 
+          <Alert as={Row}  variant="danger">
+            {nameErr}
           </Alert>}
+          </Col>
+            
          
         </Form.Group>
         <Form.Group as={Row} className="mb-3">
@@ -81,12 +118,25 @@ const Forms = () => {
               onChange={validationHandler}
               type="password"
             />
+            {passwordErr.length > 0 && 
+          <Alert as={Row}  variant="danger">
+            {passwordErr}
+          </Alert>}
           </Col>
         </Form.Group>
         <Button size="lg" type="submit" variant="primary" className="mx-4">
           Submit
         </Button>
+        
       </Form>
+        {errorMessage.length > 0 && 
+          <Alert as={Row}  variant="danger">
+            {errorMessage}
+          </Alert>}
+          {successMessage.length > 0 && 
+          <Alert as={Row}  variant="success">
+            {successMessage}
+          </Alert>}
     </>
   );
 };
