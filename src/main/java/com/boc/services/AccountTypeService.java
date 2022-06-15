@@ -25,4 +25,6 @@ public class AccountTypeService {
 		acTypeDAO.save(accountType);
 		
 	}
+
+	
 }

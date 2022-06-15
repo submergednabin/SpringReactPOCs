@@ -7,5 +7,7 @@ import com.boc.models.Account;
 
 @Repository
 public interface AccountDAO extends JpaRepository<Account, Integer> {
+	
+	Account findAccountById(int id);
 
 }
