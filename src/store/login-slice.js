@@ -12,6 +12,7 @@ const loginSlice = createSlice({
       const loginData = action.payload;
       state.username = loginData.username;
       state.password = loginData.password;
+      console.log(loginData)
     },
     logout() {},
   },
