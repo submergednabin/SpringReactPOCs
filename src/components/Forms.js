@@ -11,10 +11,10 @@ const url = "http://localhost:8080/boc";
 const Forms = () => {
   const dispatch = useDispatch();
 
-  const [login, setLogin] = useState({
-    username: "",
-    password: "",
-  });
+  // const [login, setLogin] = useState({
+  //   username: "",
+  //   password: "",
+  // });
 
   const checkLogin = useSelector((state) => state.login);
   const checkValidation = useSelector((state) => state.auth );
@@ -23,8 +23,8 @@ console.log(checkValidation)
   const [submit, setSubmit] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
-  const [nameErr, setNameErr] = useState("");
-  const [passwordErr, setPasswordErr] = useState("");
+  // const [nameErr, setNameErr] = useState("");
+  // const [passwordErr, setPasswordErr] = useState("");
   const [message] = useState({
     NAME_ERR:
       "Username must be greater than 2 Letter and must not contain special characters",
@@ -38,13 +38,14 @@ console.log(checkValidation)
   const handleLogins = (event) => {
     event.preventDefault();
     // const { name, value } = event.target;
-    if(login.username.trim()!=="" && login.password.trim()!== ""){
+    // if(login.username.trim()!=="" && login.password.trim()!== ""){
+    if(checkValidation.username.trim()!=="" && checkValidation.password.trim()!== ""){
       console.log("hey")
       setSubmit(true);
       dispatch(
         loginActions.login({
-          username: login.username,
-          password: login.password,
+          username: checkValidation.username,
+          password: checkValidation.password,
           isAuthenticated: true
         })
         );
@@ -56,10 +57,15 @@ console.log(checkValidation)
   };
 
   useEffect(() => {
+    // const datas = {
+    //   username: checkLogin.username,
+    //   password: checkLogin.password,
+    // };
     const datas = {
-      username: checkLogin.username,
-      password: checkLogin.password,
-    };
+      username: checkValidation.username,
+      password: checkValidation.password
+    }
+    console.log(datas)
     if (submit===true) {
       console.log('hello')
       axios
@@ -67,8 +73,8 @@ console.log(checkValidation)
         .then((res) => {
           if (res.status === 200) {
             setErrorMessage("");
-            setNameErr("");
-            setPasswordErr("");
+            // setNameErr("");
+            // setPasswordErr("");
 
             setSuccessMessage(message.SUCCESS);
           } else {
@@ -84,8 +90,8 @@ console.log(checkValidation)
   const loginHandler = (e) => {
     e.preventDefault();
     const datas = {
-      username: login.username,
-      password: login.password,
+      username: checkValidation.username,
+      password: checkValidation.password,
     };
     if (datas.username.trim() === "" && datas.password.trim() === "") {
       setErrorMessage(message.MANDATORY);
@@ -95,8 +101,8 @@ console.log(checkValidation)
         .then((res) => {
           if (res.status === 200) {
             setErrorMessage("");
-            setNameErr("");
-            setPasswordErr("");
+            // setNameErr("");
+            // setPasswordErr("");
 
             setSuccessMessage(message.SUCCESS);
           } else {
@@ -155,12 +161,11 @@ console.log(checkValidation)
           <small id="info" className="form-text text-muted">
             Enter your email or username
           </small>
-          {nameErr.length > 0 && (
+          {checkValidation.userError.length > 0 && (
             <Alert as={Row} variant="danger">
-              {nameErr}
+              {checkValidation.userError}
             </Alert>
           )}
-          {checkValidation.errorMsg}
 
         </InputForm>
         <InputForm
@@ -170,9 +175,9 @@ console.log(checkValidation)
           name="password"
           changeHandler={validationHandler}
         >
-          {passwordErr.length > 0 && (
+          {checkValidation.pwdError.length > 0 && (
             <Alert as={Row} variant="danger">
-              {passwordErr}
+              {checkValidation.pwdError}
             </Alert>
           )}
         </InputForm>

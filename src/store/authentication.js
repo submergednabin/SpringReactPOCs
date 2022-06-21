@@ -8,26 +8,27 @@ const authenticationSlice = createSlice({
     mandatoryErr: "",
     username: "",
     password: "",
+    userError: "",
+    pwdError: "",
   },
   reducers: {
     checkField(state, action) {
-      const name = action.payload
-        if(name.username.length < 2 ){
-          state.errorMsg = "The username must have atleast 2 letters"
-          state.username = ""
-        }else {
-            state.errorMsg = ""
-            state.username= action.payload.username
-        }
-         if(name.password.length < 2){
-          state.errorMsg = "The password must have atleast 2 letters"
-          state.password= ""
-        }
-
-        else {
-          state.errorMsg = ""
-          state.password=action.payload.password
-        }
+      const name = action.payload;
+      if (name.username.trim() !== "" && name.username.length < 2) {
+        state.userError = "The username must have atleast 2 letters";
+        state.username = "";
+      } else {
+        state.errorMsg = "";
+        state.userError = "";
+        state.username = action.payload.username;
+      }
+      if (name.password.trim() !== "" && name.password.length < 2) {
+        state.pwdError = "The password must have atleast 2 letters";
+        state.password = "";
+      } else {
+        state.pwdError = "";
+        state.password = action.payload.password;
+      }
     },
   },
 });
