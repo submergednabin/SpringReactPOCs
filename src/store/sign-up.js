@@ -2,9 +2,25 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const signUpSlice = createSlice({
     name:"signup",
-    initialState:{},
+    initialState:{
+        isAuthentiated: false,
+        email:"",
+        username:"",
+        password:'',
+        city:"",
+        firstName:'',
+        lastName:'',
+        middleName:'',
+        zipCcode:'',
+        state:'',
+        country:''
+
+    },
     reducers:{
-        register(){},
+        register(state, action){
+            const signup = action.payload;
+            console.log(signup);
+        },
     }
 });
 

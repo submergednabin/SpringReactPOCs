@@ -1,19 +1,21 @@
 import { Fragment } from "react";
-import { Container, Row, Col } from "react-bootstrap";
+import { Routes, Route } from "react-router-dom";
+import Dashboard from "./components/Dashboard";
+
+import Login from "./components/FormLayout";
 import Forms from "./components/Forms";
+import Register from "./components/Register";
 
 function App() {
-  
   return (
     <Fragment>
-      <Container>
-        <Row className="justify-content-md-center">
-          <Col>
-            <h1>BANK OF CODE</h1>
-            <Forms />
-          </Col>
-        </Row>
-      </Container>
+      <Routes>
+        <Route path="/" element={<Forms />}>
+          <Route path="login" element={<Login />} />
+        </Route>
+        <Route path="/signup" element={<Register />} />
+        <Route path="dashboard" element={<Dashboard />} />
+      </Routes>
     </Fragment>
   );
 }
