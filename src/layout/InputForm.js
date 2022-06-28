@@ -13,11 +13,7 @@ const InputForm = (props) => {
             name={props.name}
             onChange={props.changeHandler}
           />
-          {/* <small id="info" className="form-text text-muted">
-            Enter your email or username
-          </small> */}
           {props.children}
-          
         </Col>
       </Form.Group>
      

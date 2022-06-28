@@ -19,6 +19,7 @@ const Forms = () => {
   const checkLogin = useSelector((state) => state.login);
   const checkValidation = useSelector((state) => state.auth);
   console.log(checkValidation);
+  
 
   const [submit, setSubmit] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -165,7 +166,7 @@ const Forms = () => {
       <Form onSubmit={handleLogins}>
         <InputForm
           htmlFor="username"
-          label="User ID"
+          label="Username"
           type="text"
           name="username"
           changeHandler={validationHandler}
