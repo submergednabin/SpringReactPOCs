@@ -130,7 +130,7 @@ const Forms = () => {
     dispatch(
       authActions.checkField({
         ...checkValidation,
-        [name]: value,
+        [name]: value
       })
     );
     // switch (name) {
@@ -163,6 +163,7 @@ const Forms = () => {
   return (
     <>
       <FormLayout>
+        {checkValidation.isValid} 
       <Form onSubmit={handleLogins}>
         <InputForm
           htmlFor="username"
@@ -170,14 +171,13 @@ const Forms = () => {
           type="text"
           name="username"
           changeHandler={validationHandler}
+          checkErr={!!checkValidation.userError}
         >
           <small id="info" className="form-text text-muted">
             Enter your email or username
           </small>
           {checkValidation.userError.length > 0 && (
-            <Alert as={Row} variant="danger">
-              {checkValidation.userError}
-            </Alert>
+            <Form.Control.Feedback type="invalid">{checkValidation.userError}</Form.Control.Feedback>
           )}
         </InputForm>
         <InputForm
@@ -186,11 +186,10 @@ const Forms = () => {
           type="password"
           name="password"
           changeHandler={validationHandler}
+          checkErr={!!checkValidation.pwdError}
         >
           {checkValidation.pwdError.length > 0 && (
-            <Alert as={Row} variant="danger">
-              {checkValidation.pwdError}
-            </Alert>
+             <Form.Control.Feedback type="invalid">{checkValidation.pwdError}</Form.Control.Feedback>
           )}
         </InputForm>
         <Buttons action="submit">Submit</Buttons>

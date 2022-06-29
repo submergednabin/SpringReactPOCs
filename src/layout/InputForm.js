@@ -1,9 +1,12 @@
+import { isValidDateValue } from "@testing-library/user-event/dist/utils";
 import { Button, Form, Row, Col, Alert } from "react-bootstrap";
 
 const InputForm = (props) => {
+  console.log(props.check)
   return (
     <>
       <Form.Group as={Row} className="mb-3">
+      
         <Form.Label htmlFor={props.htmlFor} column sm={2}>
           {props.label}
         </Form.Label>
@@ -12,6 +15,8 @@ const InputForm = (props) => {
             type={props.type}
             name={props.name}
             onChange={props.changeHandler}
+            required
+            isInvalid={props.checkErr}
           />
           {props.children}
         </Col>
