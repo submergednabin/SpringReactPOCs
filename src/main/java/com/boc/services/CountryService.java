@@ -1,8 +1,7 @@
 package com.boc.services;
 
 import java.util.List;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -12,9 +11,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.boc.daos.CountryDAO;
+import com.boc.daos.StateDAO;
 import com.boc.models.Data;
 import com.boc.models.Datas;
-
 import com.boc.models.States;
 
 
@@ -26,36 +25,30 @@ public class CountryService {
 	
 	
 	private CountryDAO countryDAO;
+	private StateDAO stateDAO;
 	
 	@Autowired
-	public CountryService(CountryDAO countryDAO) {
+	public CountryService(CountryDAO countryDAO, StateDAO stateDAO) {
 		super();
 		this.countryDAO = countryDAO;
+		this.stateDAO = stateDAO;
 		
 	}
 	
-	/*
-	 * public CountryService(RestTemplateBuilder restTemplateBuilder) {
-	 * this.restTemplate = restTemplateBuilder .basicAuthentication("X-CSCAPI-KEY",
-	 * "Sm9aanplZ0dMRWpiT2wxZVZBRldVbnpsQlZSYlFEVGpBOXljNThnVg==") .build(); }
-	 */
 	
 	
 	public List<Data> getCountries(){
 		
-		String url = "https://countriesnow.space/api/v0.1/countries/states";
-		Datas listData =  restTemplate.getForObject(url, Datas.class);
-		List<Data> an = listData.getData();
-		return an;
+//		String url = "https://countriesnow.space/api/v0.1/countries/states";
+//		Datas listData =  restTemplate.getForObject(url, Datas.class);
+//		List<Data> an = listData.getData();
+//		return an;
+		List<Data> datas = countryDAO.findAll();
+		return datas;
 		
 	
 	}
 
-	public void addAllCountry() {
-		
-		String url = "https://countriesnow.space/api/v0.1/countries/states";
-		
-	}
 
 	public String saveAllCountry() {
 		
@@ -71,6 +64,16 @@ public class CountryService {
 
 		return "saved All";
 
+	}
+
+
+
+	public List<States> getStatesByName(String countryName) {
+		Data country = countryDAO.findByName(countryName);
+		int id = country.getId();
+		List<States> sList = stateDAO.findAllByData(country);
+
+		return sList;
 	}
 
 }

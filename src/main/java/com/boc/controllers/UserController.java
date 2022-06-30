@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,6 +17,7 @@ import com.boc.services.UserService;
 
 @RestController
 @RequestMapping(value= "/user")
+@CrossOrigin(origins= "http://localhost:3000", allowCredentials = "true")
 public class UserController {
 	
 	private UserService userService;
@@ -34,6 +36,7 @@ public class UserController {
 	
 	@PostMapping
 	public ResponseEntity addUser(@RequestBody User user) {
+		System.out.println(user);
 		String username = user.getUsername();
 		if(userService.findUserByUsername(username) != null) {
 			return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Username Already Exists");

@@ -43,10 +43,5 @@ public class AccountService {
 		
 		
 	}
-	
-//	public User findUsername(String username) {
-//		return acDAO.findByUsername(username);
-//		
-//	}
 
 }

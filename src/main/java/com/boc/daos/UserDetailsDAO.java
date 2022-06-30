@@ -3,10 +3,9 @@ package com.boc.daos;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.boc.models.Data;
+import com.boc.models.UserDetails;
 
 @Repository
-public interface CountryDAO extends JpaRepository<Data, Integer> {
+public interface UserDetailsDAO extends JpaRepository<UserDetails, Integer> {
 
-	public Data findByName(String name);
 }

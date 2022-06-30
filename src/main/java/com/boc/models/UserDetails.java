@@ -29,6 +29,9 @@ public class UserDetails {
 	@Column(name="last_name")
 	private String lastName;
 	
+	@Column(name="phone_number")
+	private long phoneNumber;
+	
 	private String city;
 	
 	@Column(name="zip_code")
@@ -47,27 +50,29 @@ public class UserDetails {
 		// TODO Auto-generated constructor stub
 	}
 
-	public UserDetails(int id, String email, String firstName, String middleName, String lastName, String city,
-			int zipCode, States state, Data data) {
+	public UserDetails(int id, String email, String firstName, String middleName, String lastName, long phoneNumber,
+			String city, int zipCode, States state, Data data) {
 		super();
 		this.id = id;
 		this.email = email;
 		this.firstName = firstName;
 		this.middleName = middleName;
 		this.lastName = lastName;
+		this.phoneNumber = phoneNumber;
 		this.city = city;
 		this.zipCode = zipCode;
 		this.state = state;
 		this.data = data;
 	}
 
-	public UserDetails(String email, String firstName, String middleName, String lastName, String city, int zipCode,
-			States state, Data data) {
+	public UserDetails(String email, String firstName, String middleName, String lastName, long phoneNumber,
+			String city, int zipCode, States state, Data data) {
 		super();
 		this.email = email;
 		this.firstName = firstName;
 		this.middleName = middleName;
 		this.lastName = lastName;
+		this.phoneNumber = phoneNumber;
 		this.city = city;
 		this.zipCode = zipCode;
 		this.state = state;
@@ -114,6 +119,14 @@ public class UserDetails {
 		this.lastName = lastName;
 	}
 
+	public long getPhoneNumber() {
+		return phoneNumber;
+	}
+
+	public void setPhoneNumber(long phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
+
 	public String getCity() {
 		return city;
 	}
@@ -138,15 +151,13 @@ public class UserDetails {
 		this.state = state;
 	}
 
-	public Data getCountry() {
+	public Data getData() {
 		return data;
 	}
 
-	public void setCountry(Data data) {
+	public void setData(Data data) {
 		this.data = data;
 	}
-	
-	
 
 	@Override
 	public int hashCode() {
@@ -159,6 +170,7 @@ public class UserDetails {
 		result = prime * result + id;
 		result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
 		result = prime * result + ((middleName == null) ? 0 : middleName.hashCode());
+		result = prime * result + (int) (phoneNumber ^ (phoneNumber >>> 32));
 		result = prime * result + ((state == null) ? 0 : state.hashCode());
 		result = prime * result + zipCode;
 		return result;
@@ -205,6 +217,8 @@ public class UserDetails {
 				return false;
 		} else if (!middleName.equals(other.middleName))
 			return false;
+		if (phoneNumber != other.phoneNumber)
+			return false;
 		if (state == null) {
 			if (other.state != null)
 				return false;
@@ -218,9 +232,10 @@ public class UserDetails {
 	@Override
 	public String toString() {
 		return "UserDetails [id=" + id + ", email=" + email + ", firstName=" + firstName + ", middleName=" + middleName
-				+ ", lastName=" + lastName + ", city=" + city + ", zipCode=" + zipCode + ", state=" + state
-				+ ", country=" + data + "]";
+				+ ", lastName=" + lastName + ", phoneNumber=" + phoneNumber + ", city=" + city + ", zipCode=" + zipCode
+				+ ", state=" + state + ", data=" + data + "]";
 	}
+
 	
 	
 }

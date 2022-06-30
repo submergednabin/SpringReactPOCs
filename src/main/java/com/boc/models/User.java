@@ -22,7 +22,7 @@ public class User {
 	private String username;
 	private String password;
 	
-	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
 	@JoinColumn(name = "user_details_id")
 	private UserDetails userDetails;
 
