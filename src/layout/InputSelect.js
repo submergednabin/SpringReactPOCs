@@ -5,7 +5,7 @@ export const InputSelect = (props) => {
   const countryName = props.datas.map((data) => {
     return (
         data!==null?
-      <option key={data.id} value={data.name}>
+      <option key={data.id} id={data.id} value={data.name}>
         {data.name}
       </option>: <option>Empty</option>
     );

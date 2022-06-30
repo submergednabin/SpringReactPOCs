@@ -14,12 +14,16 @@ const authenticationSlice = createSlice({
     firstName: "",
     lastName: "",
     middleName: "",
-    zipCcode: "",
+    phoneNumber:"",
+    zipCode: "",
     state: "",
+    stateId:"",
+    countryId:"",
     country: "",
     userError: "",
     pwdError: "",
     emailErr: "",
+    phoneErr:"",
     firstNameErr: "",
     lastNameErr: "",
     middleNameErr: "",
@@ -51,6 +55,16 @@ const authenticationSlice = createSlice({
         state.password = action.payload.password;
         state.errorMsg = "";
         state.pwdError = "";
+        state.isValid='false';
+      }
+      if (name.phoneNumber.trim() !== "" && name.phoneNumber.length < 10) {
+        state.phoneErr = "The Phone Number must have 10 Digit";
+        state.phoneNumber = "";
+        state.isValid='true';
+      } else {
+        state.phoneNumber = action.payload.phoneNumber;
+        state.errorMsg = "";
+        state.phoneErr = "";
         state.isValid='false';
       }
       if (name.email.trim() !== "" && name.email.length < 2) {
@@ -125,10 +139,14 @@ const authenticationSlice = createSlice({
       if (name.state.trim() !== "" && name.state.length < 2) {
         state.stateErr = "The State should have atleast 2 character";
         state.state = "";
+        state.stateId="";
         // state.isValid=true;
 
       } else {
         state.state = action.payload.state;
+        state.stateId=action.payload.stateId;
+        state.countryId=action.payload.countryId
+        console.log("state: " + state.stateId)
         state.stateErr = "";
         // state.isValid=false;
 
@@ -136,12 +154,28 @@ const authenticationSlice = createSlice({
       if (name.country.trim() !== "" && name.country.length < 2) {
         state.countryErr = "The Country should have atleast 2 character";
         state.country = "";
+        state.countryId=""
         // state.isValid=true;
 
       } else {
         state.country = action.payload.country;
+        state.stateId=action.payload.stateId;
+        state.countryId = action.payload.countryId;
+        console.log("countryId: " + action.payload.countryId)
         state.errorMsg = "";
         state.countryErr = "";
+        // state.isValid=false;
+
+      }
+      if (name.zipCode.trim() !== "" && name.zipCode.length < 5) {
+        state.zipCodeErr = "The Zipcode should have atleast 5 digit";
+        state.zipCode = "";
+        // state.isValid=true;
+
+      } else {
+        state.zipCode = action.payload.zipCode;
+        state.errorMsg = "";
+        state.zipCodeErr = "";
         // state.isValid=false;
 
       }

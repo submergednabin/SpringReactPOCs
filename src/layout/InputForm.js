@@ -2,7 +2,6 @@ import { isValidDateValue } from "@testing-library/user-event/dist/utils";
 import { Button, Form, Row, Col, Alert } from "react-bootstrap";
 
 const InputForm = (props) => {
-  console.log(props.check)
   return (
     <>
       <Form.Group as={Row} className="mb-3">

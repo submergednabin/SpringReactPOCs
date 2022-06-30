@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const signUpSlice = createSlice({
     name:"signup",
     initialState:{
-        data: [],
+        data: [], //this is a array which loads countryList
         stateList: [],
         isAuthentiated: false,
         email:"",
@@ -23,11 +23,13 @@ const signUpSlice = createSlice({
             const signup = action.payload;
             console.log(signup);
         },
-        initialLoad(state, action){
+        //This function handles countries Data
+        initialLoad(state, action){ 
             const countries = action.payload;
             state.data=countries
             // console.log(countries)
         },
+        //This function handles state data
         initialStateLoad(state,action){
             const states = action.payload;
             state.stateList = states;

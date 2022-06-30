@@ -15,34 +15,51 @@ const Register = () => {
   const checkValidation = useSelector((state) => state.auth);
   const register = useSelector((state) => state.signup);
   const checkCountries = checkValidation.country;
-  // console.log(register);
-  console.log(checkValidation);
-  // console.log(checkCountrie)
-
+  console.log(checkValidation)
   const validationHandler = (event) => {
     event.preventDefault();
-    const { name, value } = event.target;
+    let  { name, value } = event.target;
+    if (name === "country" ) {
+      const index = event.target.selectedIndex;
+      const el = event.target.childNodes[index];
+      var countryId = el.getAttribute("id");
+      
+    }
+
+    if(name === "state"){
+      const index = event.target.selectedIndex;
+      const el = event.target.childNodes[index];
+      var stateId = el.getAttribute("id");
+    }
+    
     dispatch(
       authActions.checkField({
         ...checkValidation,
         [name]: value,
+        countryId:countryId,
+        stateId:stateId
       })
     );
   };
 
   const listStatesByCountry = useEffect(() => {
     const countryName = checkValidation.country;
-    console.log(countryName);
     const fullUrl = `${url}/countries/state/${countryName}`;
-    axios
-      .get(fullUrl)
-      .then((res) => {
-        const datas = res.data;
-        dispatch(signUpActions.initialStateLoad(datas));
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    if (countryName.length > 0) {
+      axios
+        .get(fullUrl)
+        .then((res) => {
+          const datas = res.data;
+          dispatch(signUpActions.initialStateLoad(datas));
+        })
+        .catch((error) => {
+          if (error.code === "ERR_NETWORK") {
+            checkValidation.errorMsg = "Server Error ";
+            // console.log(checkValidation.errorMsg)
+            console.log("error");
+          }
+        });
+    }
   }, [checkCountries]);
 
   const countryList = useEffect(() => {
@@ -54,7 +71,10 @@ const Register = () => {
         dispatch(signUpActions.initialLoad(data));
       })
       .catch((error) => {
-        console.log(error);
+        if (error.code === "ERR_NETWORK") {
+          checkValidation.errorMsg = "Server Error ";
+          console.log(checkValidation.errorMsg);
+        }
       });
   }, []);
 
@@ -67,8 +87,41 @@ const Register = () => {
   //   </div>
   // })
 
-  const submitHandler = () => {
-    console.log("submitted");
+  const submitHandler = (event) => {
+    event.preventDefault();
+    if (checkValidation !== null) {
+      console.log(checkValidation.countryId);
+      const data = {
+        username: checkValidation.username,
+        password: checkValidation.password,
+        userDetails: {
+          email: checkValidation.email,
+          firstName: checkValidation.firstName,
+          middleName: checkValidation.middleName,
+          lastName: checkValidation.lastName,
+          phoneNumber: checkValidation.phoneNumber,
+          city: checkValidation.city,
+          zipCode: checkValidation.zipCode,
+          data: {
+            name: checkValidation.country,
+          },
+          state: {
+            name: checkValidation.state,
+          },
+        },
+      };
+      axios
+        .post(`${url}/user`, data)
+        .then((res) => {
+          console.log("saved Successfully");
+        })
+        .catch((error) => {
+          console.log(error.code);
+          console.log(error.message);
+        });
+    } else {
+      console.log(" validation");
+    }
   };
   return (
     <FormLayout>
@@ -154,6 +207,18 @@ const Register = () => {
             {checkValidation.lastNameErr}
           </Form.Control.Feedback>
         </InputForm>
+        <InputForm
+          htmlFor="phoneNumber"
+          label="Phone Number"
+          type="number"
+          name="phoneNumber"
+          changeHandler={validationHandler}
+          checkErr={!!checkValidation.phoneErr}
+        >
+          <Form.Control.Feedback type="invalid">
+            {checkValidation.phoneErr}
+          </Form.Control.Feedback>
+        </InputForm>
         <InputSelect
           htmlFor="country"
           label="Country"
@@ -190,18 +255,6 @@ const Register = () => {
           </Form.Control.Feedback>
         </InputForm> */}
         <InputForm
-          htmlFor="state"
-          label="state"
-          type="text"
-          name="state"
-          changeHandler={validationHandler}
-          checkErr={!!checkValidation.stateErr}
-        >
-          <Form.Control.Feedback type="invalid">
-            {checkValidation.stateErr}
-          </Form.Control.Feedback>
-        </InputForm>
-        <InputForm
           htmlFor="city"
           label="City"
           type="text"
@@ -219,10 +272,10 @@ const Register = () => {
           type="number"
           name="zipCode"
           changeHandler={validationHandler}
-          checkErr={!!checkValidation.zipCode}
+          checkErr={!!checkValidation.zipCodeErr}
         >
           <Form.Control.Feedback type="invalid">
-            {checkValidation.zipCode}
+            {checkValidation.zipCodeErr}
           </Form.Control.Feedback>
         </InputForm>
         <Buttons action="submit">Submit</Buttons>
