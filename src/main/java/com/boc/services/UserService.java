@@ -2,6 +2,7 @@ package com.boc.services;
 
 import java.util.List;
 
+import org.omg.PortableServer.POAManagerPackage.State;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -45,40 +46,43 @@ public class UserService {
 
 	public void addUser(User user) {
 		UserDetails udetails = user.getUserDetails();
+		
 		Data data = udetails.getData();
 		States states = udetails.getState();
 		country.findByName(data.getName());
 		int countryId = 0;
+		int stateId=0;
+		UserDetails ud = new UserDetails();
+		Data cc = new Data();
+		States st = new States();
 		if(country.findByName(data.getName())!=null) {
-			Data cc = country.findByName(data.getName());
+			 cc = country.findByName(data.getName());
+				udetails.setData(cc);
 			countryId =cc.getId();
-			System.out.println("country id: " + countryId);
 			
 		}else {
 			System.out.println("country does not exists in db");
 		}
 		System.out.println(states.getName());
 		String name = states.getName();
-//		System.out.println(stateDAO.findByName(name));
-		System.out.println(stateDAO.findAll());
-//		States st = state.findByName(states.getName());
-//		if(st==null) {
-//			System.out.println("state by name not found");
-//		}else {
-//			System.out.println("state by name is found in db");
-//		}
-//		States sC = state.findByDataId(countryId);
-//		if(sC==null) {
-//			System.out.println("null state by country id");
-//		}else {
-//			System.out.println("found state by country Id");
-//		}
+		if(stateDAO.findByName(states.getName())!=null) {
+			st = stateDAO.findByName(states.getName());
+			stateId = st.getId();
+			udetails.setState(st);
+		}
+	
+//		
+//		System.out.println(cc);
+		System.out.println(st);
+//		System.out.println(udetails)
 		
-//		userDetails.save(udetails); 
-//		System.out.println(userDetails);
-//		userDAO.save(user);
-		System.out.println(udetails);
+		UserDetails u = userDetails.save(udetails);
+		user.setUserDetails(u);
+		userDAO.save(user);
+			
+		}
 		
-	}
+		
+	
 	
 }

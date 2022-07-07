@@ -8,4 +8,6 @@ import com.boc.models.UserDetails;
 @Repository
 public interface UserDetailsDAO extends JpaRepository<UserDetails, Integer> {
 
+	public UserDetails findByEmail(String email);
+
 }

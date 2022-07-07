@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.boc.models.Account;
+import com.boc.models.User;
 import com.boc.services.AccountService;
 
 @RestController
@@ -34,10 +35,11 @@ public class AccountController {
 		return ResponseEntity.status(200).body(accounts);
 	}
 	
+	//let user to allow add only one credit 
+	//and one saving type of account under one username
 	@PostMapping
 	public ResponseEntity addAccount(@RequestBody Account account) {
-		
-		acService.addAccount(account);
+		 acService.addAccount(account);
 		return ResponseEntity.status(201).build();
 		
 	}
@@ -61,6 +63,34 @@ public class AccountController {
 		
 	}
 	
+	@GetMapping(value= "/user/{userId}")
+	public ResponseEntity<List<Account>> getAccountByUserId(@PathVariable int userId){
+		List<Account> allAccounts = acService.findAccountByUserId(userId);
+		if(allAccounts.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+		}else {
+			return ResponseEntity.status(200).body(allAccounts);
+		}
+	}
 	
+	@GetMapping(value = "/username/{username}")
+	public ResponseEntity<List<Account>> getAccountByUsername(@PathVariable String username){
+		
+		List<Account> accountDetails = acService.findAccountByUsername(username);
+		if(accountDetails==null) {
+			System.out.println("empty");
+			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+		}else {
+			
+			return ResponseEntity.status(200).body(accountDetails);
+		}
+	}
+	
+	@GetMapping(value="/account/{done}")
+	public ResponseEntity<List<Account>> getAllValue(@PathVariable String done){
+		return ResponseEntity.status(200).body(null);
+	}
+	
+
 
 }

@@ -8,6 +8,8 @@ import com.boc.models.AccountType;
 @Repository
 public interface AccountTypeDAO extends JpaRepository<AccountType, Integer> {
 
+	AccountType findByAccountName(String accountTypeName);
+
 	
 
 }

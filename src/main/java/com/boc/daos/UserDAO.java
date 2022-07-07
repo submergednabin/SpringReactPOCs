@@ -9,5 +9,7 @@ import com.boc.models.User;
 public interface UserDAO extends JpaRepository<User, Integer> {
 	
 	public User findByUsername(String username);
+	
+	public User findById(int userId);
 
 }
