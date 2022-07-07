@@ -13,15 +13,17 @@ const signUpSlice = createSlice({
         firstName:'',
         lastName:'',
         middleName:'',
-        zipCcode:'',
+        zipCode:'',
         state:'',
-        country:''
+        country:'',
+        successMsg:''
 
     },
     reducers:{
         register(state, action){
             const signup = action.payload;
-            console.log(signup);
+            state.successMsg = signup;
+            // state.username=""
         },
         //This function handles countries Data
         initialLoad(state, action){ 

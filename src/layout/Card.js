@@ -1,13 +1,11 @@
 import React from "react";
 import { Card } from "react-bootstrap";
-
+import styles from './Card.module.css';
 const Cards = (props) => {
   return (
-      <Card bg="primary">
+      <Card className={styles.card} bg={props.variant}>
         <Card.Body>
-          <Card.Title>{props.title}</Card.Title>
-          <Card.Title variant=''>{props.title}</Card.Title>
-          <Card.Text>{props.text}</Card.Text>
+          {props.children}
         </Card.Body>
       </Card>
   );

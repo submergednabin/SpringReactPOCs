@@ -1,16 +1,18 @@
-import Cards from "../layout/Card";
+import React from "react";
+
 import { Container, Row } from "react-bootstrap";
+import { Account } from "./Account";
+
 const Dashboard = () => {
   return (
     <>
       <Container>
         <Row>
           <h1>Dashboard</h1>
-          <Cards title="Balance Transfer" text="The description of account" />
+          <Account />
         </Row>
       </Container>
     </>
   );
 };
-
 export default Dashboard;

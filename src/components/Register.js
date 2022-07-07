@@ -7,37 +7,34 @@ import { signUpActions } from "../store/sign-up";
 import InputForm from "../layout/InputForm";
 import Buttons from "../layout/Buttons";
 import { InputSelect } from "../layout/InputSelect";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const url = "http://localhost:8080/boc";
 const Register = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const checkValidation = useSelector((state) => state.auth);
   const register = useSelector((state) => state.signup);
   const checkCountries = checkValidation.country;
-  console.log(checkValidation)
+  console.log(checkValidation);
   const validationHandler = (event) => {
     event.preventDefault();
-    let  { name, value } = event.target;
-    if (name === "country" ) {
+    const { name, value, id } = event.target;
+    if (name === "country") {
       const index = event.target.selectedIndex;
       const el = event.target.childNodes[index];
-      var countryId = el.getAttribute("id");
-      
     }
 
-    if(name === "state"){
+    if (name === "state") {
       const index = event.target.selectedIndex;
       const el = event.target.childNodes[index];
-      var stateId = el.getAttribute("id");
     }
-    
+
     dispatch(
       authActions.checkField({
         ...checkValidation,
         [name]: value,
-        countryId:countryId,
-        stateId:stateId
       })
     );
   };
@@ -55,7 +52,7 @@ const Register = () => {
         .catch((error) => {
           if (error.code === "ERR_NETWORK") {
             checkValidation.errorMsg = "Server Error ";
-            // console.log(checkValidation.errorMsg)
+
             console.log("error");
           }
         });
@@ -78,18 +75,23 @@ const Register = () => {
       });
   }, []);
 
-  // const countryName = register.data.map((d)=> {
-  //   <li key={d.id}>{d.name}</li>
-  // })
-  // countryList.map((map,index)=> {
-  //   <div>
-  //     <li key={index}>{map.name}</li>
-  //   </div>
-  // })
-
   const submitHandler = (event) => {
     event.preventDefault();
-    if (checkValidation !== null) {
+    if (
+      (checkValidation.username.trim() === "" ||
+        checkValidation.password.trim() === ""||
+      checkValidation.email.trim() === "")||
+      checkValidation.firstName.trim()===""||
+      checkValidation.lastName.trim()===""||
+      checkValidation.phoneNumber.trim()===""||
+      checkValidation.country.trim()===""||
+      checkValidation.state.trim()===""||
+      checkValidation.city.trim()===""||
+      checkValidation.zipCode.trim()===""
+    ) {
+        const msg = "All field Required"
+        dispatch(authActions.hasErrorMsg(msg))
+    } else {
       console.log(checkValidation.countryId);
       const data = {
         username: checkValidation.username,
@@ -113,14 +115,26 @@ const Register = () => {
       axios
         .post(`${url}/user`, data)
         .then((res) => {
-          console.log("saved Successfully");
+          // dispatch(authAction.login())
+          const msg = "successfully saved";
+
+          if (res.status === 201) {
+            navigate("/login", { replace: true });
+          }
         })
         .catch((error) => {
-          console.log(error.code);
-          console.log(error.message);
+          if (error.response) {
+            const isUsernameExists = error.response.data;
+            console.log(isUsernameExists);
+            if (isUsernameExists.length > 0) {
+              console.log(error.response.data);
+              dispatch(authActions.hasErrorMsg(isUsernameExists));
+              // console.log("msg: " + checkValidation.errorMsg)
+            } else {
+              console.log(error.message);
+            }
+          }
         });
-    } else {
-      console.log(" validation");
     }
   };
   return (
@@ -134,14 +148,10 @@ const Register = () => {
           changeHandler={validationHandler}
           checkErr={!!checkValidation.userError}
         >
-          {/* {checkValidation.userError.length > 0 && ( */}
-          {/* // <Alert as={Row} variant="danger">
-            //   {checkValidation.userError}
-            // </Alert> */}
           <Form.Control.Feedback type="invalid">
             {checkValidation.userError}
           </Form.Control.Feedback>
-          {/* // )} */}
+          {checkValidation.errorMsg.length > 0 ? checkValidation.errorMsg : ""}
 
           <small id="info" className="form-text text-muted">
             Enter your email or username
@@ -235,25 +245,7 @@ const Register = () => {
           name="state"
           changeHandler={validationHandler}
         ></InputSelect>
-        {/* <InputSelect
-          htmlFor="state"
-          label="State"
-          defaultValue="Select State"
-          ids={Math.random()}
-          keys="Afghanistan"
-        ></InputSelect> */}
-        {/* <InputForm
-          htmlFor="country"
-          label="country"
-          type="text"
-          name="country"
-          changeHandler={validationHandler}
-          checkErr={!!checkValidation.countryErr}
-        >
-          <Form.Control.Feedback type="invalid">
-            {checkValidation.countryErr}
-          </Form.Control.Feedback>
-        </InputForm> */}
+
         <InputForm
           htmlFor="city"
           label="City"
@@ -278,9 +270,13 @@ const Register = () => {
             {checkValidation.zipCodeErr}
           </Form.Control.Feedback>
         </InputForm>
-        <Buttons action="submit">Submit</Buttons>
+        <Buttons action="submit" color="primary">
+          Submit
+        </Buttons>
       </Form>
+      {checkValidation.errorMsg.length>0 && <Alert  variant="danger" >{checkValidation.errorMsg}</Alert>}
     </FormLayout>
+    
   );
 };
 export default Register;

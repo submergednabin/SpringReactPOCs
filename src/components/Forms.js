@@ -79,7 +79,9 @@ const Forms = () => {
             setErrorMessage("");
             // setNameErr("");
             // setPasswordErr("");
-            navigate("/dashboard", { replace: true });
+            // console.log(res.data)
+            const link = `/user/${checkValidation.username}/dashboard`;
+            navigate(link, { replace: true });
             setSuccessMessage(message.SUCCESS);
           } else {
             setErrorMessage(message.ERROR);
@@ -192,7 +194,7 @@ const Forms = () => {
              <Form.Control.Feedback type="invalid">{checkValidation.pwdError}</Form.Control.Feedback>
           )}
         </InputForm>
-        <Buttons action="submit">Submit</Buttons>
+        <Buttons action="submit" color="primary">Submit</Buttons>
       </Form>
       </FormLayout>
       {errorMessage.length > 0 && (

@@ -1,0 +1,12 @@
+.card {
+    margin-top: 5%;
+    color: white;
+}
+
+
+.balance-card {
+    display: flex;
+    flex-direction: row;
+    flex: 1;
+    color: red !important;
+}

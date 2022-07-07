@@ -33,6 +33,9 @@ const authenticationSlice = createSlice({
     zipCodeErr: "",
   },
   reducers: {
+    resetField(state, action){
+      
+    },
     checkField(state, action) {
       const name = action.payload;
       let validEmailCheck =
@@ -144,24 +147,20 @@ const authenticationSlice = createSlice({
 
       } else {
         state.state = action.payload.state;
-        state.stateId=action.payload.stateId;
-        state.countryId=action.payload.countryId
+        state.stateId=action.payload.id;
         console.log("state: " + state.stateId)
         state.stateErr = "";
         // state.isValid=false;
-
       }
       if (name.country.trim() !== "" && name.country.length < 2) {
         state.countryErr = "The Country should have atleast 2 character";
         state.country = "";
-        state.countryId=""
+        state.countryId="";
         // state.isValid=true;
-
       } else {
         state.country = action.payload.country;
-        state.stateId=action.payload.stateId;
-        state.countryId = action.payload.countryId;
-        console.log("countryId: " + action.payload.countryId)
+        state.countryId = action.payload.id;
+        console.log("countryId: " + state.countryId)
         state.errorMsg = "";
         state.countryErr = "";
         // state.isValid=false;
@@ -171,15 +170,16 @@ const authenticationSlice = createSlice({
         state.zipCodeErr = "The Zipcode should have atleast 5 digit";
         state.zipCode = "";
         // state.isValid=true;
-
       } else {
         state.zipCode = action.payload.zipCode;
         state.errorMsg = "";
         state.zipCodeErr = "";
         // state.isValid=false;
-
       }
     },
+    hasErrorMsg(state, action){
+      state.errorMsg = action.payload;
+    }
   },
 });
 export const authActions = authenticationSlice.actions;

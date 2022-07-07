@@ -14,8 +14,9 @@ const InputForm = (props) => {
             type={props.type}
             name={props.name}
             onChange={props.changeHandler}
-            required
+            // required
             isInvalid={props.checkErr}
+            value={props.value}
           />
           {props.children}
         </Col>
