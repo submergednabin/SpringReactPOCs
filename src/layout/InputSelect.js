@@ -2,12 +2,17 @@ import React from "react";
 import { Form, Col, Row } from "react-bootstrap";
 
 export const InputSelect = (props) => {
-  const countryName = props.datas.map((data) => {
-    return (
-        data!==null?
-      <option key={data.id ? data.id : data.accountTypeId} id={data.id ? data.id : data.accountTypeId} value={data.name}>
-        {data.name?data.name:data.accountName}
-      </option>: <option>Empty</option>
+  const name = props.datas.map((data) => {
+    return data !== null ? (
+      <option
+        key={data.id ? data.id : data.accountTypeId}
+        id={data.id ? data.id : data.accountTypeId}
+        value={data.name}
+      >
+        {data.name ? data.name : data.accountName}
+      </option>
+    ) : (
+      <option>Empty</option>
     );
   });
   return (
@@ -17,9 +22,13 @@ export const InputSelect = (props) => {
           {props.label}
         </Form.Label>
         <Col sm={3}>
-          <Form.Select name={props.name} onChange={props.changeHandler} value={props.value}>
+          <Form.Select
+            name={props.name}
+            onChange={props.changeHandler}
+            value={props.value}
+          >
             <option>{props.defaultValue}</option>
-            {countryName}
+            {name}
           </Form.Select>
         </Col>
       </Form.Group>

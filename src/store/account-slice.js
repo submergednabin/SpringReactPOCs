@@ -13,6 +13,7 @@ const accountSlice = createSlice({
     depositedAmount:"",
     dateCreated: "",
     msg:"",
+    accountId:""
   },
   reducers: {
     createAccount(state, action) {
@@ -28,6 +29,7 @@ const accountSlice = createSlice({
       state.accountType = action.payload.accountType;
       state.userId = action.payload.userId;
       state.depositedAmount=action.payload.depositedAmount;
+      state.accountId=action.payload.accountId
     },
     cleanAccountField(state,action){
         state.msg= action.payload;

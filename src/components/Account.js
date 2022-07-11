@@ -12,14 +12,25 @@ import { InputSelect } from "../layout/InputSelect";
 import Buttons from "../layout/Buttons";
 import { AccordianLayout } from "../layout/AccordianLayout";
 import { Transaction } from "./Transaction";
+import { ErrorPage } from "../layout/ErrorPage";
 
 const url = "http://localhost:8080/boc";
 export const Account = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const account = useSelector((state) => state.account);
-  console.log(account);
+  console.log("User Name: ", account);
   const { userId } = useParams();
+
+  let totalSum = 0;
+  const balanceCardDetails = account.datas.map((dt, i) => {
+    totalSum += dt.total_Amount;
+    return (
+      <p key={dt.id}>
+        {dt.accountType.accountName} Balance: {dt.total_Amount}
+      </p>
+    );
+  });
   useEffect(() => {
     const fullUrl = `${url}/account/username/${userId}`;
     axios
@@ -30,7 +41,7 @@ export const Account = () => {
             accountAction.createAccount({
               data: res.data,
               totalAccounts: 0,
-              userId: userId,
+              userId: "",
             })
           );
         } else {
@@ -58,17 +69,17 @@ export const Account = () => {
     });
   }, []);
 
-  //   useEffect(()=>{
-
-  //   },[])
-
   const accountEventHandler = (event) => {
     const { name, value } = event.target;
+    // const index = event.target.selectedIndex;
+    // const el = event.target.childNodes[index]
+    // const id = el.getAttribute('id');
     dispatch(
       accountAction.handleAccount({
         ...account,
         [name]: value,
         userId: userId,
+        // accountId:id
       })
     );
   };
@@ -99,60 +110,48 @@ export const Account = () => {
         console.log(error);
       });
   };
-//   const getSumValue = (arr, key) =>{
-//     return arr.reduce((accumulator , current)=> accumulator + Number(current[key]),0)
-//   }
-let totalSum=0;
-  const balanceCardDetails = account.datas.map((dt, i) => {
-       totalSum += dt.total_Amount
-      return (
-        <p key={dt.id}>
-            {dt.accountType.accountName} Balance: {dt.total_Amount}
-        </p>
-  
-    );
-  });
-  
+  //   const inValidUser = userId !== account.userId ? "yes":"no";
+  console.log("userId:", userId);
   return (
     <>
-      <Cards variant="primary">
-        <Card.Title>Create New Account</Card.Title>
-        <Form onSubmit={submitHandler}>
-          <InputSelect
-            htmlFor="accountType"
-            label="Account Type"
-            defaultValue="Select Account"
-            datas={account.accountData}
-            name="accountType"
-            changeHandler={accountEventHandler}
-            value={account.accountType}
-          ></InputSelect>
-          <InputForm
-            htmlFor="depositedAmount"
-            type="number"
-            label="Deposit Amount"
-            name="depositedAmount"
-            changeHandler={accountEventHandler}
-            value={account.depositedAmount}
-          ></InputForm>
+      {userId === account.userId ? 
+        <Cards variant="primary">
+          <Card.Title>Create New Account</Card.Title>
+          <Form onSubmit={submitHandler}>
+            <InputSelect
+              htmlFor="accountType"
+              label="Account Type"
+              defaultValue="Select Account"
+              datas={account.accountData}
+              name="accountType"
+              changeHandler={accountEventHandler}
+              value={account.accountType}
+            ></InputSelect>
+            <InputForm
+              htmlFor="depositedAmount"
+              type="number"
+              label="Deposit Amount"
+              name="depositedAmount"
+              changeHandler={accountEventHandler}
+              value={account.depositedAmount}
+            ></InputForm>
 
-          <Buttons action="submit" color="success">
-            Create Account
-          </Buttons>
-        </Form>
-      </Cards>
+            <Buttons action="submit" color="success">
+              Create Account
+            </Buttons>
+          </Form>
+        </Cards>:
+       <ErrorPage errorTitle="Page Not Found - 404 Error" reRouteLink="/login" routingTitle="Go to Login"/>
+      }
 
       {account.totalAccounts > 0 && (
         <AccordianLayout accordionKey="0" accordianTitle="Balance Details">
-            <Cards variant="success" >
-        <Card.Title>
-        {balanceCardDetails}
-        </Card.Title>
+          <Cards variant="success">
+            <Card.Title>{balanceCardDetails}</Card.Title>
 
-          <Card.Text>Total Amount : {totalSum}</Card.Text>
-       
-      </Cards>
-          
+            <Card.Text>Total Balance : {totalSum}</Card.Text>
+          </Cards>
+
           {/* <Cards class="balance-card">
             <Card.Title>Total Balance</Card.Title>
             <Card.Title variant=""></Card.Title>
@@ -168,7 +167,7 @@ let totalSum=0;
       )}
       {account.totalAccounts > 0 && (
         <AccordianLayout accordionKey="1" accordianTitle="New Transaction">
-          <Transaction />
+          <Transaction stateData={account} accountUsername={account.userId} datas = {account.datas} changeHandler={accountEventHandler} />
         </AccordianLayout>
       )}
     </>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { Form, Row,  Alert } from "react-bootstrap";
+import { useNavigate, NavLink } from "react-router-dom";
+import { Form, Row, Alert } from "react-bootstrap";
 import axios from "axios";
 import { loginActions } from "../store/login-slice";
 import { authActions } from "../store/authentication";
@@ -13,13 +13,12 @@ const url = "http://localhost:8080/boc";
 const Forms = () => {
   const dispatch = useDispatch();
 
-// React router redirect hooks
+  // React router redirect hooks
   const navigate = useNavigate();
 
   const checkLogin = useSelector((state) => state.login);
   const checkValidation = useSelector((state) => state.auth);
   console.log(checkValidation);
-  
 
   const [submit, setSubmit] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -132,7 +131,7 @@ const Forms = () => {
     dispatch(
       authActions.checkField({
         ...checkValidation,
-        [name]: value
+        [name]: value,
       })
     );
     // switch (name) {
@@ -165,37 +164,46 @@ const Forms = () => {
   return (
     <>
       <FormLayout>
-        {checkValidation.isValid} 
-      <Form onSubmit={handleLogins}>
-        <InputForm
-          htmlFor="username"
-          label="Username"
-          type="text"
-          name="username"
-          changeHandler={validationHandler}
-          checkErr={!!checkValidation.userError}
-        >
-          <small id="info" className="form-text text-muted">
-            Enter your email or username
-          </small>
-          {checkValidation.userError.length > 0 && (
-            <Form.Control.Feedback type="invalid">{checkValidation.userError}</Form.Control.Feedback>
-          )}
-        </InputForm>
-        <InputForm
-          htmlFor="password"
-          label="Password"
-          type="password"
-          name="password"
-          changeHandler={validationHandler}
-          checkErr={!!checkValidation.pwdError}
-        >
-          {checkValidation.pwdError.length > 0 && (
-             <Form.Control.Feedback type="invalid">{checkValidation.pwdError}</Form.Control.Feedback>
-          )}
-        </InputForm>
-        <Buttons action="submit" color="primary">Submit</Buttons>
-      </Form>
+        {/* {checkValidation.isValid}  */}
+        <Form onSubmit={handleLogins}>
+          <InputForm
+            htmlFor="username"
+            label="Username"
+            type="text"
+            name="username"
+            changeHandler={validationHandler}
+            checkErr={!!checkValidation.userError}
+          >
+            <small id="info" className="form-text text-muted">
+              Enter your email or username
+            </small>
+            {checkValidation.userError.length > 0 && (
+              <Form.Control.Feedback type="invalid">
+                {checkValidation.userError}
+              </Form.Control.Feedback>
+            )}
+          </InputForm>
+          <InputForm
+            htmlFor="password"
+            label="Password"
+            type="password"
+            name="password"
+            changeHandler={validationHandler}
+            checkErr={!!checkValidation.pwdError}
+          >
+            {checkValidation.pwdError.length > 0 && (
+              <Form.Control.Feedback type="invalid">
+                {checkValidation.pwdError}
+              </Form.Control.Feedback>
+            )}
+          </InputForm>
+          <Buttons action="submit" color="primary">
+            Login
+          </Buttons>
+          <NavLink to="/signup">
+            <Buttons color="primary">Create new Login</Buttons>
+          </NavLink>
+        </Form>
       </FormLayout>
       {errorMessage.length > 0 && (
         <Alert as={Row} variant="danger">
