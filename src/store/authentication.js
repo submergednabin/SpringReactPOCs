@@ -114,8 +114,8 @@ const authenticationSlice = createSlice({
 
       }
 
-      if (name.middleName.trim() !== "" && name.middleName.length < 2) {
-        state.middleNameErr = "The Middle Name should have atleast 2 character";
+      if (name.middleName.trim() === "") {
+        state.middleNameErr = "";
         state.middleName = "";
         // state.isValid=true;
 

@@ -7,7 +7,7 @@ import { accountAction } from "../store/account-slice";
 import { useSelector, useDispatch } from "react-redux";
 import { Card } from "react-bootstrap";
 import InputForm from "../layout/InputForm";
-import FormLayout from "./FormLayout";
+
 import { InputSelect } from "../layout/InputSelect";
 import Buttons from "../layout/Buttons";
 import { AccordianLayout } from "../layout/AccordianLayout";
@@ -31,6 +31,8 @@ export const Account = () => {
       </p>
     );
   });
+
+  //loading account data for first time and only when accountType changes
   useEffect(() => {
     const fullUrl = `${url}/account/username/${userId}`;
     axios
@@ -58,17 +60,20 @@ export const Account = () => {
       .catch((error) => {
         console.log(error.message);
       });
-  }, []);
+  }, [account.accountType]);
 
+  //loading all the type of account
   useEffect(() => {
     const accountTypeUri = `${url}/account/type`;
     axios.get(accountTypeUri).then((res) => {
-      console.log(res.data);
+      console.log("run after submitttt");
       const accountData = res.data;
       dispatch(accountAction.loadAccountData(accountData));
     });
   }, []);
 
+  //handling the account field information and
+  // saving it in redux so that it can be used later to saveit in database
   const accountEventHandler = (event) => {
     const { name, value } = event.target;
     // const index = event.target.selectedIndex;
@@ -83,6 +88,8 @@ export const Account = () => {
       })
     );
   };
+
+  //after all the form fields condition met, it is submitted to database to create an account 
   const submitHandler = (event) => {
     event.preventDefault();
     const submitUrl = `${url}/account`;
@@ -101,6 +108,7 @@ export const Account = () => {
       .then((res) => {
         if (res.status === 201) {
           const msg = "successfully saved";
+
           dispatch(accountAction.cleanAccountField(msg));
         }
         // const link = `/user/${userId}/dashboard`;
@@ -111,10 +119,10 @@ export const Account = () => {
       });
   };
   //   const inValidUser = userId !== account.userId ? "yes":"no";
-  console.log("userId:", userId);
+  // console.log("userId:", userId);
   return (
     <>
-      {userId === account.userId ? 
+      {account.isValidUser === true ? (
         <Cards variant="primary">
           <Card.Title>Create New Account</Card.Title>
           <Form onSubmit={submitHandler}>
@@ -140,9 +148,14 @@ export const Account = () => {
               Create Account
             </Buttons>
           </Form>
-        </Cards>:
-       <ErrorPage errorTitle="Page Not Found - 404 Error" reRouteLink="/login" routingTitle="Go to Login"/>
-      }
+        </Cards>
+      ) : (
+        <ErrorPage
+          errorTitle="Page Not Found - 404 Error"
+          reRouteLink="/login"
+          routingTitle="Go to Login"
+        />
+      )}
 
       {account.totalAccounts > 0 && (
         <AccordianLayout accordionKey="0" accordianTitle="Balance Details">
@@ -167,7 +180,13 @@ export const Account = () => {
       )}
       {account.totalAccounts > 0 && (
         <AccordianLayout accordionKey="1" accordianTitle="New Transaction">
-          <Transaction stateData={account} accountUsername={account.userId} datas = {account.datas} changeHandler={accountEventHandler} />
+          <Transaction
+            stateData={account}
+            accountUsername={account.userId}
+            datas={account.datas}
+            changeHandler={accountEventHandler}
+            username = {account.userId}
+          />
         </AccordianLayout>
       )}
     </>

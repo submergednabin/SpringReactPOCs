@@ -10,17 +10,18 @@ const accountSlice = createSlice({
     accountName: "",
     userId: "",
     username: "",
-    depositedAmount:"",
+    depositedAmount: "",
     dateCreated: "",
-    msg:"",
-    accountId:""
+    msg: "",
+    accountId: "",
+    isValidUser: false,
   },
   reducers: {
     createAccount(state, action) {
       state.totalAccounts = action.payload.totalAccounts;
       state.userId = action.payload.userId;
       state.datas = action.payload.data;
-      state.dateCreated=new Date().toString();
+      state.dateCreated = new Date().toString();
     },
     loadAccountData(state, action) {
       state.accountData = action.payload;
@@ -28,17 +29,19 @@ const accountSlice = createSlice({
     handleAccount(state, action) {
       state.accountType = action.payload.accountType;
       state.userId = action.payload.userId;
-      state.depositedAmount=action.payload.depositedAmount;
-      state.accountId=action.payload.accountId
+      state.depositedAmount = action.payload.depositedAmount;
+      state.accountId = action.payload.accountId;
     },
-    cleanAccountField(state,action){
-        state.msg= action.payload;
-        state.accountType="";
-        state.accountName="";
-        state.depositedAmount="";
-        state.dateCreated="";
-
-    }
+    cleanAccountField(state, action) {
+      state.msg = action.payload;
+      state.accountType = "";
+      state.accountName = "";
+      state.depositedAmount = "";
+      state.dateCreated = "";
+    },
+    checkValidUser(state, action) {
+      state.isValidUser = action.payload;
+    },
   },
 });
 

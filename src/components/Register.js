@@ -78,19 +78,19 @@ const Register = () => {
   const submitHandler = (event) => {
     event.preventDefault();
     if (
-      (checkValidation.username.trim() === "" ||
-        checkValidation.password.trim() === ""||
-      checkValidation.email.trim() === "")||
-      checkValidation.firstName.trim()===""||
-      checkValidation.lastName.trim()===""||
-      checkValidation.phoneNumber.trim()===""||
-      checkValidation.country.trim()===""||
-      checkValidation.state.trim()===""||
-      checkValidation.city.trim()===""||
-      checkValidation.zipCode.trim()===""
+      checkValidation.username.trim() === "" ||
+      checkValidation.password.trim() === "" ||
+      checkValidation.email.trim() === "" ||
+      checkValidation.firstName.trim() === "" ||
+      checkValidation.lastName.trim() === "" ||
+      checkValidation.phoneNumber.trim() === "" ||
+      checkValidation.country.trim() === "" ||
+      checkValidation.state.trim() === "" ||
+      checkValidation.city.trim() === "" ||
+      checkValidation.zipCode.trim() === ""
     ) {
-        const msg = "All field Required"
-        dispatch(authActions.hasErrorMsg(msg))
+      const msg = "All field Required";
+      dispatch(authActions.hasErrorMsg(msg));
     } else {
       console.log(checkValidation.countryId);
       const data = {
@@ -151,11 +151,7 @@ const Register = () => {
           <Form.Control.Feedback type="invalid">
             {checkValidation.userError}
           </Form.Control.Feedback>
-          {checkValidation.errorMsg.length > 0 ? checkValidation.errorMsg : ""}
-
-          <small id="info" className="form-text text-muted">
-            Enter your email or username
-          </small>
+          {/* {checkValidation.errorMsg.length > 0 ? checkValidation.errorMsg : ""} */}
         </InputForm>
         <InputForm
           htmlFor="password"
@@ -274,9 +270,10 @@ const Register = () => {
           Submit
         </Buttons>
       </Form>
-      {checkValidation.errorMsg.length>0 && <Alert  variant="danger" >{checkValidation.errorMsg}</Alert>}
+      {checkValidation.errorMsg.length > 0 && (
+        <Alert variant="danger">{checkValidation.errorMsg}</Alert>
+      )}
     </FormLayout>
-    
   );
 };
 export default Register;

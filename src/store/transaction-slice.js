@@ -1,26 +1,46 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const transactionSlice = createSlice({
-    name:"transaction",
-    initialState:{
-        datas:[],
-        accountId:"",
-        transactionTypeId:"",
-        transactionTypeName:"",
-        transactionAmount:"",
-        accountTypeName:"",
+  name: "transaction",
+  initialState: {
+    datas: [],
+    accountId: "",
+    transactionTypeId: "",
+    transactionTypeName: "",
+    transactionAmount: "",
+    accountTypeName: "",
+    status: "pending",
+    transactionData: "",
+    description: "",
+    errorMsg: "",
+    successMsg: "",
+  },
+  reducers: {
+    postTransactionData(state, action) {
+      if (action.payload.accountId !== null) {
+        state.accountId = action.payload.accountId;
+      }
+      state.transactionTypeId = action.payload.transactionTypeId;
+      state.transactionAmount = action.payload.transactionAmount;
+      state.transactionDate = new Date().toString();
+      state.description = action.payload.description;
     },
-    reducers:{
-        postTransactionData(state,action){
-            if(action.payload.accountId !== null){
-
-                state.accountId=action.payload.accountId;
-            }
-            state.transactionTypeId=action.payload.transactionType;
-            // state.accountTypeName=action.payload.accountType;
-        },
-
-    }
+    submitTransaction(state, action) {
+      if (action.payload.errorMsg === null) {
+        state.errorMsg = "All * field are Required  !!";
+        state.successMsg = "";
+      } else {
+        state.successMsg = "Transaction completed";
+        state.errorMsg = "";
+        state.transactionTypeId = "";
+        state.transactionAmount = "";
+        state.transactionDate = "";
+        state.description = "";
+        state.accountType="";
+        state.status = "completed"
+      }
+    },
+  },
 });
 
 export const transactionAction = transactionSlice.actions;
