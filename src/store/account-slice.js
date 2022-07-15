@@ -31,7 +31,9 @@ const accountSlice = createSlice({
       state.userId = action.payload.userId;
       state.depositedAmount = action.payload.depositedAmount;
       state.accountId = action.payload.accountId;
+      state.msg = "";
     },
+    // After account is submitted,
     cleanAccountField(state, action) {
       state.msg = action.payload;
       state.accountType = "";

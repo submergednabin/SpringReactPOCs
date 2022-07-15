@@ -10,7 +10,7 @@ const transactionSlice = createSlice({
     transactionAmount: "",
     accountTypeName: "",
     status: "pending",
-    transactionData: "",
+    transactionDate: "",
     description: "",
     errorMsg: "",
     successMsg: "",
@@ -24,9 +24,12 @@ const transactionSlice = createSlice({
       state.transactionAmount = action.payload.transactionAmount;
       state.transactionDate = new Date().toString();
       state.description = action.payload.description;
+      state.status="completed"
+      state.errorMsg="";
+      state.successMsg=""
     },
     submitTransaction(state, action) {
-      if (action.payload.errorMsg === null) {
+      if (action.payload.errorMsg === true) {
         state.errorMsg = "All * field are Required  !!";
         state.successMsg = "";
       } else {
@@ -37,7 +40,7 @@ const transactionSlice = createSlice({
         state.transactionDate = "";
         state.description = "";
         state.accountType="";
-        state.status = "completed"
+        state.status = ""
       }
     },
   },

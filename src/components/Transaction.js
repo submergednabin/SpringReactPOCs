@@ -1,11 +1,11 @@
 import axios from "axios";
 import React, { Fragment, useEffect, useState } from "react";
-import { Form, Col, Row } from "react-bootstrap";
+import { Form, Col, Row, Alert } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { transactionAction } from "../store/transaction-slice";
 import Buttons from "../layout/Buttons";
 
-const url = "http://localhost:8080/boc/transaction-type";
+const url = "http://localhost:8080/boc";
 export const Transaction = (props) => {
   const transaction = useSelector((state) => state.transaction);
   const dispatch = useDispatch();
@@ -20,8 +20,9 @@ export const Transaction = (props) => {
     );
   });
   useEffect(() => {
+    const url1 = `${url}/transaction-type`;
     axios
-      .get(url)
+      .get(url1)
       .then((res) => {
         setTransactionType(res.data);
       })
@@ -57,11 +58,11 @@ export const Transaction = (props) => {
   };
   const submitTransactionHandler = (event) => {
     event.preventDefault();
-    console.log(transaction.accountId.length);
+    console.log("submit after " + transaction.transactionAmount);
     if (
       transaction.accountId !== "" &&
-      transaction.transactionId !== "" &&
-      transaction.transactionAmount !== ""
+      transaction.transactionId !== "undefined" &&
+      transaction.transactionAmount > 0
     ) {
       const datas = {
         user: {
@@ -76,11 +77,26 @@ export const Transaction = (props) => {
         transactionAmount: transaction.transactionAmount,
         transactionStatus: transaction.status,
         description: transaction.description,
+        transactionDate: transaction.transactionDate,
       };
-
-      dispatch(transactionAction.submitTransaction({successMsg: true}))
+      console.log(datas);
+      const url2 = `${url}/account/update/${props.username}/${transaction.accountId}`;
+      axios
+        .put(url2, datas)
+        .then((res) => {
+          console.log(res.status);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      dispatch(transactionAction.submitTransaction({ successMsg: true }));
     } else {
-      dispatch(transactionAction.submitTransaction({ errorMsg: null }));
+      // console.log("transaction amt" + transaction.transactionAmount);
+      // if (transaction.transactionAmount === "0") {
+      //   dispatch(transactionAction.submitTransaction({ amountErr: 0 }));
+      // }
+
+      dispatch(transactionAction.submitTransaction({ errorMsg: true }));
     }
   };
   return (
@@ -152,6 +168,12 @@ export const Transaction = (props) => {
           Add
         </Buttons>
       </Form>
+      {transaction.errorMsg.length > 0 && (
+        <Alert variant="danger">{transaction.errorMsg}</Alert>
+      )}
+      {transaction.successMsg.length > 0 && (
+        <Alert variant="success">{transaction.successMsg}</Alert>
+      )}
     </Fragment>
   );
 };

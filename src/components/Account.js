@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import Cards from "../layout/Card";
-import { Form } from "react-bootstrap";
+import { Form, Alert } from "react-bootstrap";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 import { accountAction } from "../store/account-slice";
@@ -19,7 +19,7 @@ export const Account = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const account = useSelector((state) => state.account);
-  console.log("User Name: ", account);
+  console.log("account Datas: ", account);
   const { userId } = useParams();
 
   let totalSum = 0;
@@ -89,7 +89,7 @@ export const Account = () => {
     );
   };
 
-  //after all the form fields condition met, it is submitted to database to create an account 
+  //after all the form fields condition met, it is submitted to database to create an account
   const submitHandler = (event) => {
     event.preventDefault();
     const submitUrl = `${url}/account`;
@@ -103,20 +103,29 @@ export const Account = () => {
       },
       total_Amount: account.depositedAmount,
     };
-    axios
-      .post(submitUrl, data)
-      .then((res) => {
-        if (res.status === 201) {
-          const msg = "successfully saved";
 
-          dispatch(accountAction.cleanAccountField(msg));
-        }
-        // const link = `/user/${userId}/dashboard`;
-        // navigate(link, { replace: true });
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    if (
+      account.accountType.trim() !== "" &&
+      account.depositedAmount.trim() !== ""
+    ) {
+      axios
+        .post(submitUrl, data)
+        .then((res) => {
+          console.warn("check account post status: " + res.status);
+          if (res.status === 201) {
+            const msg = res.data;
+            dispatch(accountAction.cleanAccountField(msg));
+          }
+          // const link = `/user/${userId}/dashboard`;
+          // navigate(link, { replace: true });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }else{
+      const msg = "All fields required";
+      dispatch(accountAction.cleanAccountField(msg));
+    }
   };
   //   const inValidUser = userId !== account.userId ? "yes":"no";
   // console.log("userId:", userId);
@@ -148,6 +157,9 @@ export const Account = () => {
               Create Account
             </Buttons>
           </Form>
+          {account.msg.length > 0 && (
+            <Alert variant="light">{account.msg}</Alert>
+          )}
         </Cards>
       ) : (
         <ErrorPage
@@ -159,17 +171,11 @@ export const Account = () => {
 
       {account.totalAccounts > 0 && (
         <AccordianLayout accordionKey="0" accordianTitle="Balance Details">
-          <Cards variant="success">
+          <Cards variant="danger">
             <Card.Title>{balanceCardDetails}</Card.Title>
 
             <Card.Text>Total Balance : {totalSum}</Card.Text>
           </Cards>
-
-          {/* <Cards class="balance-card">
-            <Card.Title>Total Balance</Card.Title>
-            <Card.Title variant=""></Card.Title>
-            <Card.Text>The description of account</Card.Text>
-          </Cards> */}
         </AccordianLayout>
       )}
       {account.totalAccounts > 0 && (
@@ -185,7 +191,7 @@ export const Account = () => {
             accountUsername={account.userId}
             datas={account.datas}
             changeHandler={accountEventHandler}
-            username = {account.userId}
+            username={account.userId}
           />
         </AccordianLayout>
       )}
