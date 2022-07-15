@@ -15,9 +15,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.boc.daos.AccountDAO;
+import com.boc.daos.UserDAO;
 import com.boc.models.Account;
+import com.boc.models.Transaction;
 import com.boc.models.User;
 import com.boc.services.AccountService;
+import com.boc.services.TransactionService;
 
 @RestController
 @RequestMapping(value = "/account")
@@ -26,6 +30,12 @@ public class AccountController {
 	
 	@Autowired
 	private AccountService acService;
+	
+	@Autowired
+	private TransactionService tService;
+	
+	@Autowired
+	private UserDAO uDAO;
 	
 	
 	@GetMapping
@@ -38,9 +48,9 @@ public class AccountController {
 	//let user to allow add only one credit 
 	//and one saving type of account under one username
 	@PostMapping
-	public ResponseEntity addAccount(@RequestBody Account account) {
-		 acService.addAccount(account);
-		return ResponseEntity.status(201).build();
+	public ResponseEntity<String> addAccount(@RequestBody Account account) {
+		String accountInfo= acService.addAccount(account);
+		return ResponseEntity.status(201).body(accountInfo);
 		
 	}
 	
@@ -86,10 +96,28 @@ public class AccountController {
 		}
 	}
 	
-	@GetMapping(value="/account/{done}")
-	public ResponseEntity<List<Account>> getAllValue(@PathVariable String done){
-		return ResponseEntity.status(200).body(null);
-	}
+	/*
+	 * Update Account and Transactions
+	 */
+	@PutMapping(value = "/update/{username}/{accountId}")
+	public ResponseEntity<String> updateAccountAndSaveTransaction(@RequestBody Transaction transaction,
+			@PathVariable String username, @PathVariable int accountId ){
+		System.out.println("controller id " + accountId);
+		Account account = transaction.getAccount();
+		if(uDAO.findByUsername(username) != null) {
+			account = acService.findAccount(accountId);
+			if(account != null) {
+				acService.updateAccountDetailsByaccountId(account, transaction);
+				
+			}
+		}
+		return null;
+	} 
+//	@GetMapping(value="/account/type/{username}")
+//	public ResponseEntity<List<Account>> getAccountTypeOfUser(@PathVariable String username){
+//		List<Account> accountList = acService.findAllAccountTypeByUsername(username);
+//		return ResponseEntity.status(200).body(null);
+//	}
 	
 
 
