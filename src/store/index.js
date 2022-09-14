@@ -4,6 +4,8 @@ import signUpReducer from "./sign-up";
 import authReducer from "./authentication";
 import accountReducer from "./account-slice";
 import transactionReducer from "./transaction-slice";
+import statementReducer from "./statement-slice";
+import userReducer from "./user-slice";
 
 const store = configureStore({
   reducer: {
@@ -12,6 +14,8 @@ const store = configureStore({
     auth: authReducer,
     account: accountReducer,
     transaction: transactionReducer,
+    statement: statementReducer,
+    user: userReducer,
   },
 });
 

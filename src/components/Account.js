@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import Cards from "../layout/Card";
 import { Form, Alert } from "react-bootstrap";
 import axios from "axios";
-import { useParams, useNavigate } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { accountAction } from "../store/account-slice";
 import { useSelector, useDispatch } from "react-redux";
 import { Card } from "react-bootstrap";
@@ -13,18 +13,26 @@ import Buttons from "../layout/Buttons";
 import { AccordianLayout } from "../layout/AccordianLayout";
 import { Transaction } from "./Transaction";
 import { ErrorPage } from "../layout/ErrorPage";
+import { Statement } from "./Statement";
+import { Header } from "../layout/Header";
 
 const url = "http://localhost:8080/boc";
 export const Account = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const account = useSelector((state) => state.account);
+  const userSelector = useSelector((state) => state.user);
+  const transaction = useSelector((state) => state.transaction);
   console.log("account Datas: ", account);
   const { userId } = useParams();
-
+  const { pathname } = useLocation();
   let totalSum = 0;
+  console.warn("Account check ", account);
+
+  //only suming the saving and checking accounts coz credit is not the assets it is a debt
   const balanceCardDetails = account.datas.map((dt, i) => {
-    totalSum += dt.total_Amount;
+    if (dt.accountType.accountName !== "Credit") {
+      totalSum += dt.total_Amount;
+    }
     return (
       <p key={dt.id}>
         {dt.accountType.accountName} Balance: {dt.total_Amount}
@@ -76,9 +84,6 @@ export const Account = () => {
   // saving it in redux so that it can be used later to saveit in database
   const accountEventHandler = (event) => {
     const { name, value } = event.target;
-    // const index = event.target.selectedIndex;
-    // const el = event.target.childNodes[index]
-    // const id = el.getAttribute('id');
     dispatch(
       accountAction.handleAccount({
         ...account,
@@ -122,17 +127,25 @@ export const Account = () => {
         .catch((error) => {
           console.log(error);
         });
-    }else{
+    } else {
       const msg = "All fields required";
       dispatch(accountAction.cleanAccountField(msg));
     }
   };
+  const routerPath = `/user/${userId}/newAccount`;
+  // const isMatch = matchPath(routerPath, pathname)
+  const isMatch = pathname === routerPath;
   //   const inValidUser = userId !== account.userId ? "yes":"no";
   // console.log("userId:", userId);
+  // console.log("check Account route :" , checkRouter)
   return (
     <>
+      {isMatch && <Header userData={userSelector} />}
       {account.isValidUser === true ? (
         <Cards variant="primary">
+          {account.msg.length > 0 && (
+            <Alert variant="danger">{account.msg}</Alert>
+          )}
           <Card.Title>Create New Account</Card.Title>
           <Form onSubmit={submitHandler}>
             <InputSelect
@@ -151,15 +164,13 @@ export const Account = () => {
               name="depositedAmount"
               changeHandler={accountEventHandler}
               value={account.depositedAmount}
+              size="3"
             ></InputForm>
 
             <Buttons action="submit" color="success">
               Create Account
             </Buttons>
           </Form>
-          {account.msg.length > 0 && (
-            <Alert variant="light">{account.msg}</Alert>
-          )}
         </Cards>
       ) : (
         <ErrorPage
@@ -169,8 +180,8 @@ export const Account = () => {
         />
       )}
 
-      {account.totalAccounts > 0 && (
-        <AccordianLayout accordionKey="0" accordianTitle="Balance Details">
+      {!isMatch && account.totalAccounts > 0 && (
+        <AccordianLayout accordionKey="0" accordianTitle={`Balance Summary `}>
           <Cards variant="danger">
             <Card.Title>{balanceCardDetails}</Card.Title>
 
@@ -178,13 +189,8 @@ export const Account = () => {
           </Cards>
         </AccordianLayout>
       )}
-      {account.totalAccounts > 0 && (
-        <AccordianLayout
-          accordionKey="1"
-          accordianTitle="Statements"
-        ></AccordianLayout>
-      )}
-      {account.totalAccounts > 0 && (
+
+      {!isMatch && account.totalAccounts > 0 && (
         <AccordianLayout accordionKey="1" accordianTitle="New Transaction">
           <Transaction
             stateData={account}
@@ -193,6 +199,11 @@ export const Account = () => {
             changeHandler={accountEventHandler}
             username={account.userId}
           />
+        </AccordianLayout>
+      )}
+      {!isMatch && account.totalAccounts > 0 && (
+        <AccordianLayout accordionKey="2" accordianTitle="Statements">
+          <Statement transaction={transaction} account={account}></Statement>
         </AccordianLayout>
       )}
     </>

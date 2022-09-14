@@ -3,7 +3,7 @@ import { Button } from "react-bootstrap";
 const Buttons = (props) => {
   return (
     <>
-      <Button size="lg" type={props.action} variant={props.color} className="mx-4">
+      <Button size={props.size} type={props.action} variant={props.color} className={props.class}>
         {props.children}
       </Button>
     </>

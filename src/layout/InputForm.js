@@ -9,7 +9,7 @@ const InputForm = (props) => {
         <Form.Label htmlFor={props.htmlFor} column sm={2}>
           {props.label}
         </Form.Label>
-        <Col sm={3}>
+        <Col sm={props.size}>
           <Form.Control
             type={props.type}
             name={props.name}

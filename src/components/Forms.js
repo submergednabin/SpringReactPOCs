@@ -8,6 +8,7 @@ import { authActions } from "../store/authentication";
 import InputForm from "../layout/InputForm";
 import Buttons from "../layout/Buttons";
 import FormLayout from "./FormLayout";
+import styles from "./Form.module.css";
 
 const url = "http://localhost:8080/boc";
 const Forms = () => {
@@ -16,15 +17,12 @@ const Forms = () => {
   // React router redirect hooks
   const navigate = useNavigate();
 
-  const checkLogin = useSelector((state) => state.login);
   const checkValidation = useSelector((state) => state.auth);
-  console.log(checkValidation);
 
   const [submit, setSubmit] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
-  // const [nameErr, setNameErr] = useState("");
-  // const [passwordErr, setPasswordErr] = useState("");
+
   const [message] = useState({
     NAME_ERR:
       "Username must be greater than 2 Letter and must not contain special characters",
@@ -38,13 +36,11 @@ const Forms = () => {
 
   const handleLogins = (event) => {
     event.preventDefault();
-    // const { name, value } = event.target;
-    // if(login.username.trim()!=="" && login.password.trim()!== ""){
+
     if (
       checkValidation.username.trim() !== "" &&
       checkValidation.password.trim() !== ""
     ) {
-      console.log("hey");
       setSubmit(true);
       dispatch(
         loginActions.login({
@@ -60,25 +56,18 @@ const Forms = () => {
   };
 
   useEffect(() => {
-    // const datas = {
-    //   username: checkLogin.username,
-    //   password: checkLogin.password,
-    // };
     const datas = {
       username: checkValidation.username,
       password: checkValidation.password,
     };
-    console.log(datas);
+    // console.log(datas);
     if (submit === true) {
-      console.log("hello");
       axios
         .post(`${url}/login`, datas)
         .then((res) => {
+          console.log("dsata", res);
           if (res.status === 200) {
             setErrorMessage("");
-            // setNameErr("");
-            // setPasswordErr("");
-            // console.log(res.data)
             const link = `/user/${checkValidation.username}/dashboard`;
             navigate(link, { replace: true });
             setSuccessMessage(message.SUCCESS);
@@ -95,7 +84,7 @@ const Forms = () => {
           }
         });
     }
-  }, [checkLogin]);
+  });
 
   const loginHandler = (e) => {
     e.preventDefault();
@@ -111,8 +100,7 @@ const Forms = () => {
         .then((res) => {
           if (res.status === 200) {
             setErrorMessage("");
-            // setNameErr("");
-            // setPasswordErr("");
+            
 
             setSuccessMessage(message.SUCCESS);
           } else {
@@ -134,87 +122,67 @@ const Forms = () => {
         [name]: value,
       })
     );
-    // switch (name) {
-    //   case "username":
-    //     if (value.length <= 2) {
-    //       setNameErr("Username must be greater than 2 characters");
-    //     }
-    //      else {
-    //       setLogin({ ...login, [name]: value });
-    //       setNameErr("");
-    //     }
-    //     break;
-    //   case "password":
-    //     if (value.length <= 3) {
-    //       setPasswordErr("password length must be greater than 3");
-    //     } else if (value.length > 20) {
-    //       setPasswordErr("Password cannot exceeed 20 characters");
-    //     } else {
-    //       setLogin({ ...login, [name]: value });
-    //       setPasswordErr("");
-    //     }
-    //     break;
-
-    //   default:
-    //       setErrorMessage(message.MANDATORY);
-    //     break;
-    // }
   };
-
+  const cssLogin = `${styles.loginForm} col-lg-8 offset-lg-2`;
   return (
     <>
       <FormLayout>
-        {/* {checkValidation.isValid}  */}
-        <Form onSubmit={handleLogins}>
-          <InputForm
-            htmlFor="username"
-            label="Username"
-            type="text"
-            name="username"
-            changeHandler={validationHandler}
-            checkErr={!!checkValidation.userError}
-          >
-            <small id="info" className="form-text text-muted">
-              Enter your email or username
-            </small>
-            {checkValidation.userError.length > 0 && (
-              <Form.Control.Feedback type="invalid">
-                {checkValidation.userError}
-              </Form.Control.Feedback>
+
+        <Form className="col-md-10 offset-1 mt-4 " onSubmit={handleLogins}>
+          <div className={cssLogin}>
+            <h1>BANK OF CODE</h1>
+            {errorMessage.length > 0 && (
+              <p className={styles["invalid-required"]}>{errorMessage}</p>
             )}
-          </InputForm>
-          <InputForm
-            htmlFor="password"
-            label="Password"
-            type="password"
-            name="password"
-            changeHandler={validationHandler}
-            checkErr={!!checkValidation.pwdError}
-          >
-            {checkValidation.pwdError.length > 0 && (
-              <Form.Control.Feedback type="invalid">
-                {checkValidation.pwdError}
-              </Form.Control.Feedback>
+            {successMessage.length > 0 && (
+              <Alert as={Row} variant="success">
+                {successMessage}
+              </Alert>
             )}
-          </InputForm>
-          <Buttons action="submit" color="primary">
-            Login
-          </Buttons>
-          <NavLink to="/signup">
-            <Buttons color="primary">Create new Login</Buttons>
-          </NavLink>
+            <InputForm
+              htmlFor="username"
+              label="Username"
+              type="text"
+              name="username"
+              changeHandler={validationHandler}
+              checkErr={!!checkValidation.userError}
+              size="6"
+            >
+              <small id="info" className="form-text text-muted">
+                Enter your email or username
+              </small>
+              {checkValidation.userError.length > 0 && (
+                <Form.Control.Feedback type="invalid">
+                  {checkValidation.userError}
+                </Form.Control.Feedback>
+              )}
+            </InputForm>
+            <InputForm
+              htmlFor="password"
+              label="Password"
+              type="password"
+              name="password"
+              changeHandler={validationHandler}
+              checkErr={!!checkValidation.pwdError}
+              size="6"
+            >
+              {checkValidation.pwdError.length > 0 && (
+                <Form.Control.Feedback type="invalid">
+                  {checkValidation.pwdError}
+                </Form.Control.Feedback>
+              )}
+            </InputForm>
+            <Buttons class="mx-4" size="sm" action="submit" color="primary">
+              Login
+            </Buttons>
+            <NavLink to="/signup">
+              <Buttons class="mx-4" size="sm" color="primary">
+                Create new Login
+              </Buttons>
+            </NavLink>
+          </div>
         </Form>
       </FormLayout>
-      {errorMessage.length > 0 && (
-        <Alert as={Row} variant="danger">
-          {errorMessage}
-        </Alert>
-      )}
-      {successMessage.length > 0 && (
-        <Alert as={Row} variant="success">
-          {successMessage}
-        </Alert>
-      )}
     </>
   );
 };

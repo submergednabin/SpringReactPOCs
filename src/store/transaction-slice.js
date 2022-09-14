@@ -43,6 +43,7 @@ const transactionSlice = createSlice({
         state.status = ""
       }
     },
+    
   },
 });
 

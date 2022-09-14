@@ -139,7 +139,7 @@ const Register = () => {
   };
   return (
     <FormLayout>
-      <Form onSubmit={submitHandler}>
+      <Form onSubmit={submitHandler}  >
         <InputForm
           htmlFor="username"
           label="Username"
@@ -147,6 +147,7 @@ const Register = () => {
           name="username"
           changeHandler={validationHandler}
           checkErr={!!checkValidation.userError}
+          size="3"
         >
           <Form.Control.Feedback type="invalid">
             {checkValidation.userError}
@@ -160,6 +161,7 @@ const Register = () => {
           name="password"
           changeHandler={validationHandler}
           checkErr={!!checkValidation.pwdError}
+          size="3"
         >
           <Form.Control.Feedback type="invalid">
             {checkValidation.pwdError}
@@ -172,6 +174,7 @@ const Register = () => {
           name="email"
           changeHandler={validationHandler}
           checkErr={!!checkValidation.emailErr}
+          size="3"
         >
           <Form.Control.Feedback type="invalid">
             {checkValidation.emailErr}
@@ -184,6 +187,7 @@ const Register = () => {
           name="firstName"
           changeHandler={validationHandler}
           checkErr={!!checkValidation.firstNameErr}
+          size="3"
         >
           <Form.Control.Feedback type="invalid">
             {checkValidation.firstNameErr}
@@ -196,6 +200,7 @@ const Register = () => {
           name="middleName"
           changeHandler={validationHandler}
           checkErr={!!checkValidation.middleNameErr}
+          size="3"
         >
           <Form.Control.Feedback type="invalid">
             {checkValidation.middleNameErr}
@@ -208,6 +213,7 @@ const Register = () => {
           name="lastName"
           changeHandler={validationHandler}
           checkErr={!!checkValidation.lastNameErr}
+          size="3"
         >
           <Form.Control.Feedback type="invalid">
             {checkValidation.lastNameErr}
@@ -220,6 +226,7 @@ const Register = () => {
           name="phoneNumber"
           changeHandler={validationHandler}
           checkErr={!!checkValidation.phoneErr}
+          size="3"
         >
           <Form.Control.Feedback type="invalid">
             {checkValidation.phoneErr}
@@ -249,6 +256,7 @@ const Register = () => {
           name="city"
           changeHandler={validationHandler}
           checkErr={!!checkValidation.cityErr}
+          size="3"
         >
           <Form.Control.Feedback type="invalid">
             {checkValidation.cityErr}
@@ -261,12 +269,13 @@ const Register = () => {
           name="zipCode"
           changeHandler={validationHandler}
           checkErr={!!checkValidation.zipCodeErr}
+          size="3"
         >
           <Form.Control.Feedback type="invalid">
             {checkValidation.zipCodeErr}
           </Form.Control.Feedback>
         </InputForm>
-        <Buttons action="submit" color="primary">
+        <Buttons class="mx-4" size="sm" action="submit" color="primary">
           Submit
         </Buttons>
       </Form>

@@ -1,0 +1,16 @@
+/* body{
+    background-color: rgb(10, 5, 8);
+} */
+.loginForm{
+    background: linear-gradient(to right top, rgb(127, 127, 206), rgb(97, 204, 226));
+    color: white;
+    padding: 40px;
+}
+.invalid-required{
+    color: red;
+}
+.loginForm h1{
+    background-color: red;
+    text-align: center;
+
+}

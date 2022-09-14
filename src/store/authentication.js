@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-
+//form validation logic
 const authenticationSlice = createSlice({
   name: "auth",
   initialState: {
@@ -48,7 +48,8 @@ const authenticationSlice = createSlice({
         state.username = action.payload.username;
         state.errorMsg = "";
         state.userError="";
-        state.isValid='false'
+        state.isValid='false';
+        
       }
       if (name.password.trim() !== "" && name.password.length < 2) {
         state.pwdError = "The password must have atleast 2 letters";

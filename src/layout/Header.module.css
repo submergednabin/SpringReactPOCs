@@ -1,0 +1,29 @@
+.active {
+    color: white;
+    font-size: 18px;
+    text-decoration: underline;
+}
+.active:hover {
+    color: BLACK;
+    border-right: 2px solid grey;
+    padding-right: 5px;
+}
+.headers {
+    color: white !important;
+    text-decoration: none;
+    pointer-events: none;
+    
+}
+.inactive {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+}
+.dropdown-menu a {
+    color: white ;
+}
+.inactive-dropdown{
+    color: green !important;
+    text-decoration: none;
+    font-size: 18px;
+}

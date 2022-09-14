@@ -5,9 +5,8 @@ const FormLayout = (props) => {
  return(
     <>
     <Container>
-      <Row className="justify-content-md-center">
+      <Row >
         <Col>
-          <h1>BANK OF CODE</h1>
           {props.children}
         </Col>
       </Row>

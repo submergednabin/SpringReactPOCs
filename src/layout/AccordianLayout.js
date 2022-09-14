@@ -6,9 +6,9 @@ export const AccordianLayout = (props) =>{
 
     return(
         <>
-            <Accordion className={styles.accordion}>
-                <Accordion.Item eventKey={props.accordianKey}>
-                    <Accordion.Header>{props.accordianTitle}</Accordion.Header>
+            <Accordion className={styles.accordion} >
+                <Accordion.Item className={styles['accordion-item']} eventKey={props.accordianKey}>
+                    <Accordion.Header className={styles['accordion-headers']} >{props.accordianTitle}</Accordion.Header>
                     <Accordion.Body>
                         {props.children}
                     </Accordion.Body>

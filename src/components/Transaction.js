@@ -103,6 +103,12 @@ export const Transaction = (props) => {
     <Fragment>
       {/* {props.accountUsername} */}
       <Form noValidate onSubmit={submitTransactionHandler}>
+      {transaction.errorMsg.length > 0 && (
+        <Alert variant="danger">{transaction.errorMsg}</Alert>
+      )}
+      {transaction.successMsg.length > 0 && (
+        <Alert variant="success">{transaction.successMsg}</Alert>
+      )}
         <Form.Group as={Row} className="mb-3">
           <Form.Label htmlFor="accountType" column sm={2}>
             Account Type *
@@ -168,12 +174,7 @@ export const Transaction = (props) => {
           Add
         </Buttons>
       </Form>
-      {transaction.errorMsg.length > 0 && (
-        <Alert variant="danger">{transaction.errorMsg}</Alert>
-      )}
-      {transaction.successMsg.length > 0 && (
-        <Alert variant="success">{transaction.successMsg}</Alert>
-      )}
+     
     </Fragment>
   );
 };
