@@ -68,7 +68,7 @@ public class AccountService {
 			acDAO.save(account); 
 			return "saved";
 		}else {
-			return "User already has " + accountTypeName + ". Create New Account/ Start Transaction ";
+			return accountTypeName + " account already exists!!!";
 		}
 	
 	}

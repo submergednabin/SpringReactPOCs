@@ -15,11 +15,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.boc.daos.AccountDAO;
 import com.boc.daos.UserDAO;
 import com.boc.models.Account;
 import com.boc.models.Transaction;
-import com.boc.models.User;
 import com.boc.services.AccountService;
 import com.boc.services.TransactionService;
 

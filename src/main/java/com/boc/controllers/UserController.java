@@ -59,5 +59,13 @@ public class UserController {
 			return ResponseEntity.status(200).body(true);
 		}
 	}
+	
+	@GetMapping(value="user-detail/{details}")
+	public ResponseEntity<User> getUserById(@PathVariable String details){
+		User user = userService.findUserByUsername(details);
+		return ResponseEntity.status(200).body(user);
+	}
+	
+	
 
 }
